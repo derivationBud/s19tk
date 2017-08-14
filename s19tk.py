@@ -87,7 +87,7 @@ def s19encode(mem,bpl,verbose=False):
         line += mem[add]
         # If end-of-file or jump in addresses or end-of-line
         if len(adds)==0  or (adds[-1]!= add+1) or len(line)==bpl*2:
-            line = "{:06X}".format(lineAdd)    +line
+            line = "{:08X}".format(lineAdd)    +line
             line = "{:02X}".format(len(line)//2+1)+line
             line = line+"{:02X}".format(s19checksum(line))
             line = "S3"+line
@@ -103,18 +103,20 @@ def test():
     assert s19checksum(      "04123456"     )==0x5F
     assert s19checksum(      "0512345678"   )==0xE6
     assert s19checksum(      "06123456789A" )==0x4B
+
     assert s19decode(     ["S1041234565F"    ],True)=={0x1234:'56'}
     assert s19decode(     ["S20512345678E6"  ],True)=={0x123456:'78'}
     assert s19decode(     ["S306123456789A4B"],True)=={0x12345678:'9A'}
+
     assert s19encode({0x12345678:'9A'},20)==["S306123456789A4B"]
-    assert s19encode({0:'A0',1:'A1',2:'A2',3:'A3'},20)==['S308000000A0A1A2A371']
-    assert s19encode({0:'A0',1:'A1',2:'A2',3:'A3'}, 4)==['S308000000A0A1A2A371']
-    assert s19encode({0:'A0',1:'A1',2:'A2',3:'A3'}, 2)==['S306000000A0A1B8', 
-                                                         'S306000002A2A3B2']
-    assert s19encode({0:'A0',1:'A1',2:'A2',3:'A3'}, 1)==['S305000000A05A', 
-                                                         'S305000001A158', 
-                                                         'S305000002A256',
-                                                         'S305000003A354']
+    assert s19encode({0:'A0',1:'A1',2:'A2',3:'A3'},20)==['S30900000000A0A1A2A370']
+    assert s19encode({0:'A0',1:'A1',2:'A2',3:'A3'}, 4)==['S30900000000A0A1A2A370']
+    assert s19encode({0:'A0',1:'A1',2:'A2',3:'A3'}, 2)==['S30700000000A0A1B7', 
+                                                         'S30700000002A2A3B1']
+    assert s19encode({0:'A0',1:'A1',2:'A2',3:'A3'}, 1)==['S30600000000A059', 
+                                                         'S30600000001A157', 
+                                                         'S30600000002A255',
+                                                         'S30600000003A353']
     print("Test PASS")
 
 def cli():
