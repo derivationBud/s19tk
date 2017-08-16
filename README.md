@@ -1,3 +1,49 @@
+# transmute
+python2/3 preprocessor
+
+```
+$ python transmute.py -h
+usage: transmute.py [-h] [-v] [-out OUT] [-a] in
+
+    The intent of this script is to mimic the behavior of a php
+preprocessor, but using python syntax. This program parses text
+files and forwards the contents unchanged,  except when marked-up
+segments of python codes are found. In that case the text is executed,
+and is substituted with the result of its own execution.
+
+positional arguments:
+  in          Input filename
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -v          Increase verbosity
+  -out OUT    Output filename, stdout is used if not specified
+  -a          Output filename is guessed from the input filename
+
+    For example, the input file:
+
+    <<x="Context">>
+    Hello world!
+    <<echo("This should be displayed.")>>
+    And this is a loop...
+    <<
+    for i in range(3):
+       print("  * Looping:{}".format(i))
+
+    >>And this is <<echo(x)>> sharing.
+
+    Should result in:
+
+    Hello world!
+    This should be displayed.
+    And this is a loop...
+      * Looping:0
+      * Looping:1
+      * Looping:2
+    And this is Context sharing.
+    
+```
+
 # s19tk
 python2/3 s-records codecs
 
